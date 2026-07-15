@@ -1,6 +1,10 @@
 
 This generates new gnome icons from an existing set based on a prompt.
 
+[Example icons](https://www.opendesktop.org/member/859476/products/)
+
+[Video Instructions](https://youtu.be/THG79GpO464)
+
 ## Requirements
 
 nVidia video card with 16gb+ VRAM.  It'll work with less VRAM but it'll be slower.
@@ -19,9 +23,9 @@ nVidia video card with 16gb+ VRAM.  It'll work with less VRAM but it'll be slowe
 
 
 
-# The command line way
+## The command line way
 
-## If you have ComfyUI on Linux.  Change the Yaru path below to whatever icon set you want to base the icons on
+### If you have ComfyUI on Linux.  Change the Yaru path below to whatever icon set you want to base the icons on
 
 * Get your prompt ready.  Ask chatbots "Please describe XXX graphic style". Copy the paragraphs that you like.  Remove references to colors if you don't want single colors.  Remove references to shapes, objects, it may override the shapes on the icon.
 * `python make_icons.py /usr/share/icons/Yaru <ComfyUIPath>`
@@ -33,7 +37,7 @@ nVidia video card with 16gb+ VRAM.  It'll work with less VRAM but it'll be slowe
 * Change the theme with Gnome Tweaks.
 
 
-## If you have ComfyUI on Windows
+### If you have ComfyUI on Windows
 
 ComfyUI works best with a nVidia video card.  Most people have one on their gaming PC which is usually in windows.
 
@@ -58,7 +62,6 @@ Copy the `/tmp/icon_files.tgz` to Windows and extract it.
 * Go to Gnome tweaks, appearance and load up your new icons
 
 
-https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
 
 
 ## To change brightness
@@ -130,13 +133,7 @@ Then run `wsl --shutdown` to restart it.
 
 Use `make_icons.py --draw-size=xx` to set the size.
 
-Based on Tela 
-* Full size will be ~800mb
-* 96 pixel size will be ~100mb
-* 80 pixel size will be ~80mb
-* 64 pixel size will be ~40mb
-
-If your icons work well in small resolution use `make_icons.py --min-size=0` to use it for all icons.  
+If your icons are visually ok in small resolution use `make_icons.py --min-size=0` to use it for all icons.  
 Or edit `index.theme`, at the bottom change the `fullres/` sections so that `MinSize=xx` is small.
 
 
