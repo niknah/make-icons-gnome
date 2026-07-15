@@ -74,7 +74,7 @@ def deduplicate(directory: Path, index: dict[str, Path],
         for name in files:
             root_short_folder = Path(root).relative_to(directory)
             if len(root_short_folder.parts) > 0 and str(root_short_folder.parts[0]) == "fullres":
-                print(f"skip {root_short_folder}")
+                logging.debug(f"skip {root_short_folder}")
                 continue
             path = Path(root) / name
             if not path.is_file() or path.is_symlink():
@@ -124,28 +124,28 @@ def symlink_dupes(dir1, dir2, dry_run) -> None:
         sys.exit("Error: dir2 must not be the same as or inside dir1.")
 
     if dry_run:
-        print("=== DRY RUN — no files will be modified ===\n")
+        logging.info("=== DRY RUN — no files will be modified ===\n")
 
     # --- Phase 1: index dir1 ---
-    print(f"[1/2] Indexing '{dir1}' …")
+    logging.debug(f"[1/2] Indexing '{dir1}' …")
     index = build_index(dir1)
-    print(f"      {len(index)} unique file(s) indexed.\n")
+    logging.debug(f"      {len(index)} unique file(s) indexed.\n")
 
     if not index:
-        print("No files found in dir1. Nothing to do.")
+        logging.info("No files found in dir1. Nothing to do.")
         return
 
     # --- Phase 2: deduplicate dir2 ---
-    print(f"[2/2] Scanning '{dir2}' for duplicates …")
+    logging.debug(f"[2/2] Scanning '{dir2}' for duplicates …")
     matched, errors = deduplicate(dir2, index, dry_run)
 
-    print()
-    print("=== Summary ===")
-    print(f"  Unique files in dir1 : {len(index)}")
-    print(f"  Files matched in dir2 : {matched}")
-    print(f"  Errors               : {errors}")
+    logging.info()
+    logging.info("=== Summary ===")
+    logging.info(f"  Unique files in dir1 : {len(index)}")
+    logging.info(f"  Files matched in dir2 : {matched}")
+    logging.info(f"  Errors               : {errors}")
     if dry_run:
-        print("  (dry-run — nothing was changed)")
+        logging.info("  (dry-run — nothing was changed)")
 
 ###########
 
@@ -248,7 +248,7 @@ def recreate_links(source_folder: Path, dest_folder: Path, dry_run: bool = False
     dest_folder = dest_folder.resolve()
 
     if not source_folder.exists():
-        print(f"Error: source folder does not exist: {source_folder}", file=sys.stderr)
+        logging.error(f"Error: source folder does not exist: {source_folder}", file=sys.stderr)
         sys.exit(1)
 
     links_found = 0
@@ -318,7 +318,7 @@ def recreate_links(source_folder: Path, dest_folder: Path, dry_run: bool = False
                     link_target = link_target.with_suffix('.png')
                 link_target_final = dest_link_path.parent / link_target
             else:
-                print(f"4dox: {name}, {link_target_final} {dest_link_path}")
+                # print(f"4dox: {name}, {link_target_final} {dest_link_path}")
                 logging.debug(f"Already done: {link_target_final}")
                 links_skipped += 1
                 continue
@@ -340,16 +340,16 @@ def recreate_links(source_folder: Path, dest_folder: Path, dry_run: bool = False
                 links_created += 1
             except OSError as e:
                 msg = f"Error creating {dest_link_path}: {e}"
-                print(msg, file=sys.stderr)
+                logging.error(msg, file=sys.stderr)
                 errors.append(msg)
 
     # Summary
     action = "Would create" if dry_run else "Created"
-    print(f"\nDone. Found {links_found} link(s). {action}: {links_created}, Skipped: {links_skipped}, Errors: {len(errors)}")
+    logging.info(f"\nDone. Found {links_found} link(s). {action}: {links_created}, Skipped: {links_skipped}, Errors: {len(errors)}")
     if errors:
-        print("\nErrors encountered:")
+        logging.error("\nErrors encountered:")
         for e in errors:
-            print(f"  {e}")
+            logging.error(f"  {e}")
     return {
         "links_created" : links_created,
         "links_found" : links_found,
