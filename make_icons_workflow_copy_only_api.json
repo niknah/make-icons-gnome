@@ -1,0 +1,88 @@
+{
+  "76": {
+    "inputs": {
+      "image": [
+        "126",
+        1
+      ]
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "124": {
+    "inputs": {
+      "spreadsheet": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "Spreadsheet2Video",
+    "_meta": {
+      "title": "Spreadsheet2Video"
+    }
+  },
+  "125": {
+    "inputs": {
+      "text_file": "make_random_icons.csv",
+      "sheet_name": ""
+    },
+    "class_type": "Spreadsheet2VideoLoadText",
+    "_meta": {
+      "title": "Spreadsheet2Video Load Spreadsheet"
+    }
+  },
+  "126": {
+    "inputs": {
+      "COLUMN1": "i2i"
+    },
+    "class_type": "Spreadsheet2VideoInputImage",
+    "_meta": {
+      "title": "Spreadsheet2Video Input Image"
+    }
+  },
+  "130": {
+    "inputs": {
+      "filename": [
+        "126",
+        2
+      ],
+      "path": "",
+      "extension": "png",
+      "lossless_webp": true,
+      "quality_jpeg_or_webp": 100,
+      "optimize_png": false,
+      "embed_workflow": false,
+      "save_workflow_as_json": false,
+      "counter": 0,
+      "time_format": "%Y-%m-%d-%H%M%S",
+      "show_preview": true,
+      "images": [
+        "145",
+        0
+      ]
+    },
+    "class_type": "Image Saver Simple",
+    "_meta": {
+      "title": "Image Saver Simple"
+    }
+  },
+  "145": {
+    "inputs": {
+      "resize_type": "scale dimensions",
+      "resize_type.width": 80,
+      "resize_type.height": 80,
+      "resize_type.crop": "center",
+      "scale_method": "area",
+      "input": [
+        "76",
+        0
+      ]
+    },
+    "class_type": "ResizeImageMaskNode",
+    "_meta": {
+      "title": "Resize Image/Mask"
+    }
+  }
+}

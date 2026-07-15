@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Make icons</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='wait_comfy.js') }}"></script>
+</head>
+<body>
+
+<div class='main-container'>
+
+<div class='loader-container form-hidden' id='spinner' >
+	<span class="loader"></span>
+</div>
+
+<form id='make-icons-form' class='make-icons-form' method="post" action="/do_make_icons">
+	<input type='hidden' name='postprocess' id='postprocess' value='' />
+	<table class='form-table'>
+	<tr><td>Brightness:</td><td> <input type="number" step=0.01 name="brightness" value="1" title="0.5 = darken. 2.0 = double brightness" /></td></tr>
+	<tr><td>Min pixel size:</td><td> <input type="number" name="min_size" value="32" title="Sizes lower than this will not be processed" /></td></tr>
+	<tr><td>Draw size:</td><td> <input type="number" name="draw_size" value="80" title="Minimum size to draw" /></td></tr>
+	<tr><td>White background:</td><td> <input type="checkbox" name="white" value="1" /></td></tr>
+	<tr><td>Transparency range:</td><td> 
+		<input type="number" class="transparency_range_input" size="3" min="0" max="256" name="transparency_range_min" value="" title="32 for black background(make it lower for dark icons). 192 for white." /> - 
+		<input type="number" class="transparency_range_input" size="3" min="0" max="256" name="transparency_range_max" value="" title="64 for black background(make it lower for dark icons). 223 for white." />
+	</td></tr>
+	</table>
+	<input type="submit" value="Make icons" />
+	<input type="button" class='skip-button' value="Skip" />
+
+	<p />
+	<a class='clean_icons' href='/clean_icons' target='_out'>Clean Icons</a>
+</form>
+
+<form id='run-comfy-form' class='run-comfy-form form-hidden' method="post" action="/do_run_comfy" >
+Try out your prompt with <a download='make_icons_workflow.json' href="{{ url_for('static', filename='make_icons_workflow.json') }}">this workflow</a> in <a href='http://localhost:8188' target='_out'>ComfyUI</a>.
+	<br />
+
+	Prompt:<br /> <textarea class='prompt' name="prompt" placeholder="Change icon to a glowing led style on a solid black background.  Keep the same colors."></textarea>
+	<br />
+	Seed: <input type="number" class='seed' name="seed" value="1" />
+	<p />
+	This will take a long time.  Few hours.
+	<br />
+	<input type="submit" value="Run Comfy" />
+	<input type="button" class='skip-button' value="Skip" />
+</form>
+
+<div id='comfy_container' class='form-hidden'>
+	<div id='waiting_comfy' class='waiting_comfy'>Waiting to finish. Check console for progress.</div>
+	<!--
+	<div id='done_comfy' class='done_comfy'><a href='brightness'>Done: change brightness</a></div>
+	-->
+</div>
+
+<div id='done-message' class='form-hidden'>
+	Done. Icons are in {{ output_final_path }}
+	<br />
+	<p id='symlink_needed' class='form-hidden'>
+		Copy to Linux and run <code>copy_links.py {{icons_path}} {{ output_final_path }}</code>
+	</p>
+</div>
+
+<div id='error'></div>
+
+</div><!-- main-container -->
+
+<script src="{{ url_for('static', filename='make_icons.js') }}"></script>
+</body>
+</html>

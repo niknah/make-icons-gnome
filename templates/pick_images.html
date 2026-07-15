@@ -1,0 +1,58 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Folder Comparison</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='pick_images.js') }}"></script>
+</head>
+<body class="{% if white %}bgwhite{% endif %}">
+    <h1>Image Folder Comparison</h1>
+    Click on an image to copy it to the first folder.
+    <table>
+        <thead>
+            <tr>
+                <th>Images</th>
+                {% for folder in folders %}
+                <th class="folder-header">{{ folder }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in images %}
+            <tr>
+            
+                {% set source_image = row[0] %}
+            
+                <td class='image-name'>{{ source_image }}</td>
+                {% for folder in folders %}
+                <td class="image-container">
+                    {% set image = row[loop.index0] %}
+                    {% set img_src = "img/%d/%s" | format(loop.index0, image)  %}
+                    {% set link_image = (loop.index0>0 and source_image == image) %}
+                    {% if image %}
+                    {% if link_image %}
+                    <form method="post" action="/copy_image" style="display:inline;">
+                        <input type="hidden" name="source_path" value="{{ image }}">
+                        <input type="hidden" name="folder" value="{{ loop.index0 }}">
+                        <img 
+                            class='icon-img click-image' loading="lazy" src="{{img_src}}" alt="{{ image }}" 
+                            onclick="copyImage(this.parentNode)"
+                            >
+                    {% else %}
+                        <img 
+                            class='icon-img' loading="lazy" src="{{img_src}}" alt="{{ image }}" 
+                    {% endif %}
+                    </form>
+                    {% else %}
+                    <span style="color: #aaa;">No image</span>
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+

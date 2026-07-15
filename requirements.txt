@@ -1,0 +1,5 @@
+# svglib>=2.0.2
+flask
+pycairo
+cairocffi
+commented-configparser
