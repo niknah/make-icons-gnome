@@ -20,8 +20,7 @@ from commentedconfigparser import CommentedConfigParser
 
 
 
-output_width = 192
-output_height = 192
+default_size = 192
 draw_size = 0
 
 class IconsPath:
@@ -40,7 +39,7 @@ class IconsPath:
         self.options = options
         self.scalable = True if options.get('type', "").lower() == 'scalable' else False
 
-        self.max_size = self.resolution = int(options.get('size', output_width))
+        self.max_size = self.resolution = int(options.get('size', default_size))
         if 'maxsize' in self.options:
             self.max_size = int(self.options['maxsize'])
 
@@ -79,8 +78,8 @@ class IconsPath:
         return self.path.relative_to(self.root_path)
 
     def get_max_resolution(self):
-        comfy_width = max(self.resolution, self.max_size, output_width)
-        comfy_height = max(self.resolution, self.max_size, output_height)
+        comfy_width = max(self.resolution, self.max_size, default_size)
+        comfy_height = max(self.resolution, self.max_size, default_size)
 
         return (comfy_width, comfy_height)
 
@@ -208,7 +207,45 @@ class MakeIcons:
             output_width=comfy_width,
             output_height=comfy_height
         )
+        pil_img_orig = Image.open(png_path)
+        pil_img = pil_img_orig.copy()
 
+        datas = pil_img_orig.get_flattened_data()
+
+        if self.transparency_black:
+            bg_color=(0, 0, 0, 255)
+        else:
+            bg_color=(255, 255, 255, 255)
+        new_data = []
+        for item in datas:
+            # Check if the alpha value (item[3]) is transparent (0)
+            if item[3] == 0:
+                # Replace with a solid color (e.g., Solid Red)
+                new_data.append(bg_color)
+            else:
+                new_data.append(item)
+        # 3. Update the image data and save
+        pil_img.putdata(new_data)
+
+        new_data = []
+        (_, percent_transparent) = self.make_transparent(pil_img)
+        if percent_transparent >= 0.95:
+            logging.warn(f"Nothing much visible, inverting image png: {png_path}")
+            for item in datas:
+                if item[3] == 0:
+                    new_data.append(bg_color)
+                else:
+                    new_data.append((255-item[0], 255-item[1], 255-item[2], item[3]))
+            # 3. Update the image data and save
+        else:
+            for item in datas:
+                if item[3] == 0:
+                    new_data.append(bg_color)
+                else:
+                    new_data.append(item)
+
+        pil_img.putdata(new_data)
+        pil_img.save(png_path)
 
     def get_transparent_pixels_percent(self, pil_img):
         grayscale_img = pil_img.convert('L')
@@ -694,6 +731,7 @@ class MakeIcons:
 
     def make_icons(self, args):
         global draw_size
+        global default_size
 
 
         # 4. Use the arguments in your code
@@ -706,7 +744,7 @@ class MakeIcons:
 
         self.min_size = args.min_size
         if args.fullres_size > 0:
-            self.fullres_size = args.fullres_size
+            default_size = self.fullres_size = args.fullres_size
         if args.draw_size > 0:
             draw_size = args.draw_size
             if self.fullres_size == 0 or self.fullres_size > draw_size:
