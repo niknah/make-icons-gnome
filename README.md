@@ -129,6 +129,13 @@ Then run `wsl --shutdown` to restart it.
 
 * Use the nvfp4 version of Flux klein if you have a 5xxx series nVidia card.
 
+* Can be used for any folder with images in it.  Doesn't have to be an icon set.
+```
+python make_icons.py <PathWithImages> <ComfyUIPath>
+python run_comfy.py <ComfyUIPath> "YourPrompt"
+```
+
+
 ## Sizes
 
 Use `make_icons.py --draw-size=xx` to set the size.
@@ -142,5 +149,6 @@ Or edit `index.theme`, at the bottom change the `fullres/` sections so that `Min
 * Shows an icon by name: `python show_icon.py <IconName> <PixelSize>`
 * Make a bunch of empty files in the current directory to view file type icons `make_mime_types_examples.py YourIconSet/fullres/MimeTypes`
 * Check that all the icons have been done.  `diff_icons.sh <SourceIconSet> <YourNewIconSet>`
+
 
 
