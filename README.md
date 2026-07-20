@@ -1,7 +1,7 @@
 
 This generates new gnome icons from an existing set based on a prompt.
 
-[Example icons](https://www.opendesktop.org/member/859476/products/)
+[Example icons](https://www.gnome-look.org/u/niknah/)
 
 [Video Instructions](https://youtu.be/THG79GpO464)
 
