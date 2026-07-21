@@ -12,7 +12,8 @@ import requests
 
 base_url = "http://localhost:8188"
 copy_only = False
-workflow_api = "make_icons_workflow_copy_only_api.json" if copy_only else "make_icons_workflow_api.json" 
+script_path = Path(__file__).resolve()
+workflow_api = script_path.parent / ("make_icons_workflow_copy_only_api.json" if copy_only else "make_icons_workflow_api.json")
 
 def poll_website(url, interval=30, max_retries=3):
     session = requests.Session()  # reuse TCP connection
