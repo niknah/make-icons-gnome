@@ -1,9 +1,14 @@
 
+
 This generates new gnome icons from an existing set based on a prompt.
+
+If you are not making gnome icons, just wish to bulk edit some images use [bulk\_edit\_workflow](bulk_edit_workflow.json)
 
 [Example icons](https://www.gnome-look.org/u/niknah/)
 
 [Video Instructions](https://youtu.be/THG79GpO464)
+
+
 
 ## Requirements
 
@@ -14,7 +19,8 @@ nVidia video card with 16gb+ VRAM.  It'll work with less VRAM but it'll be slowe
 ## To install
 
 * Install ComfyUI, load the workflow from `static/make_icons_workflow.json`
-* Click Manager ->  Install missing nodes
+* Click Extensions or Manager ->  Install missing nodes
+* Also install "Queued Reboot" nodes.
 * Then download the models show on the right panel.
 * In Windows install GTK: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
 * `pip install -r requirements.txt`

@@ -49,8 +49,8 @@ def poll_website(url, interval=30, max_retries=3):
 
 def run_csv(filename, prompt, seed):
     # Load your exported API JSON
-    with open(workflow_api, "r", encoding="utf-8") as f:
-        workflow_data = json.load(f)
+
+    workflow_data = json.loads(workflow_api.read_text(encoding="utf-8"))
 
     found = False
     seed_found = False
