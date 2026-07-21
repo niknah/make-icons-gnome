@@ -112,18 +112,32 @@ def wait_for_start():
         time.sleep(30)
     return False
 
+# alternative reboot: https://github.com/t22m003/ComfyUI-QueuedReboot
+def reboot_comfy_queued():
+    req =  urllib.request.Request(base_url + "/prompt", data=json.dumps({ "prompt" : {
+        "1": { "class_type": "RebootComfyNode", "inputs": { "wait_for_queue_empty": True } },
+        }}).encode('utf-8'))
+    response = urllib.request.urlopen(req)
+    return json.loads(response.read())
+
+# Use old comfy manager to reboot
+def reboot_comfy_manager():
+    url = base_url + "/api/manager/reboot"
+    req = urllib.request.Request(url, headers={}, method="POST")
+    with urllib.request.urlopen(req): # as response:
+        # data = response.text
+        pass
+
+
 def reboot_comfy():
     try:
-        url = base_url + "/api/manager/reboot"
-        req = urllib.request.Request(url, headers={}, method="POST")
-        with urllib.request.urlopen(req): # as response:
-            # data = response.text
-            pass
-
-    except Exception as e:
-        if not isinstance(e, ConnectionResetError):
-            print(f"Reboot Error {e}")
-
+        reboot_comfy_manager()
+    except Exception:
+        try:
+            reboot_comfy_queued()
+        except Exception as e:
+            if not isinstance(e, ConnectionResetError):
+                print(f"Reboot Error {e}")
     time.sleep(30)
     wait_for_start()
 
