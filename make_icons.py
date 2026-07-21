@@ -230,7 +230,7 @@ class MakeIcons:
         new_data = []
         (_, percent_transparent) = self.make_transparent(pil_img)
         if percent_transparent >= 0.95:
-            logging.warn(f"Nothing much visible, inverting image png: {png_path}")
+            logging.warning(f"Nothing much visible, inverting image png: {png_path}")
             for item in datas:
                 if item[3] == 0:
                     new_data.append(bg_color)
@@ -279,7 +279,7 @@ class MakeIcons:
         (_, percent_transparent) = self.make_transparent(pil_img)
 
         if percent_transparent >= 0.95:
-            logging.warn(f"Fix transparent background, revert: {png_path}")
+            logging.warning(f"Fix transparent background, revert: {png_path}")
 
             # mostly transparent.  Revert the background
             background = 0xffffff if self.transparency_black else 0x000000
@@ -570,7 +570,7 @@ class MakeIcons:
             folders = self.read_index_theme(index_path)
 
         else:
-            logging.warn("index.theme does not exist.  Going through all files.")
+            logging.warning("index.theme does not exist.  Going through all files.")
             folders = self.find_folders(root)
 
         if not folders or len(folders)==0:
