@@ -112,13 +112,19 @@ def wait_for_start():
         time.sleep(30)
     return False
 
-# alternative reboot: https://github.com/t22m003/ComfyUI-QueuedReboot
-def reboot_comfy_queued():
-    req =  urllib.request.Request(base_url + "/prompt", data=json.dumps({ "prompt" : {
-        "1": { "class_type": "RebootComfyNode", "inputs": { "wait_for_queue_empty": True } },
-        }}).encode('utf-8'))
-    response = urllib.request.urlopen(req)
-    return json.loads(response.read())
+def reboot_comfy_v2():
+    req =  urllib.request.Request(base_url + "/v2/manager/reboot", data=json.dumps({}).encode('utf-8'), headers={'Content-Type':'application/json'})
+    try:
+        urllib.request.urlopen(req)
+        # raw_bytes = response.read()
+        # 2. Dynamically look up the server's declared text encoding (defaults to utf-8 if missing)
+        # encoding = response.headers.get_content_charset() or "utf-8"
+        # 3. Decode the byte string into plain text
+        # response_text = raw_bytes.decode(encoding)
+    except Exception as e:
+        print(f"Expected error on reboot: {e}")
+        return True
+    return False
 
 # Use old comfy manager to reboot
 def reboot_comfy_manager():
@@ -131,10 +137,10 @@ def reboot_comfy_manager():
 
 def reboot_comfy():
     try:
-        reboot_comfy_manager()
+        reboot_comfy_v2()
     except Exception:
         try:
-            reboot_comfy_queued()
+            reboot_comfy_manager()
         except Exception as e:
             if not isinstance(e, ConnectionResetError):
                 print(f"Reboot Error {e}")
