@@ -20,7 +20,6 @@ nVidia video card with 16gb+ VRAM.  It'll work with less VRAM but it'll be slowe
 
 * Install ComfyUI, load the workflow from `static/make_icons_workflow.json`
 * Click Extensions or Manager ->  Install missing nodes
-* Also install "Queued Reboot" nodes.
 * Then download the models show on the right panel.
 * In Windows install GTK: https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
 * `pip install -r requirements.txt`
@@ -155,6 +154,14 @@ Or edit `index.theme`, at the bottom change the `fullres/` sections so that `Min
 * Shows an icon by name: `python show_icon.py <IconName> <PixelSize>`
 * Make a bunch of empty files in the current directory to view file type icons `make_mime_types_examples.py YourIconSet/fullres/MimeTypes`
 * Check that all the icons have been done.  `diff_icons.sh <SourceIconSet> <YourNewIconSet>`
+
+
+## How it works.
+
+* The `make_icons.py` turns the icons into images in the draw size you want.  Only uses the biggest icons.
+* ComfyUI applies the prompt to turn the images into the style you want.
+* The `make_icons.py` copies the images into `output/make_final_icons` resizes them back to their different sizes in the icon set.  The full resolution icons will be copied into `output/make_final_icons/full_res`.
+* `copy_links.py` will make the symlinks again for the new icon set.
 
 
 
